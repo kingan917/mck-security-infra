@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-project
+  namespace: mongodb
+data:
+  baseUrl: https://myopsmgr-svc.mongodb.svc.cluster.local:8443
+
+  projectName: project-0
+
+  orgId: <orgId>
+
+  sslMMSCAConfigMap: ca-issuer
+  sslRequireValidMMSServerCertificates: 'true'

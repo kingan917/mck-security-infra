@@ -1,0 +1,57 @@
+apiVersion: mongodb.com/v1
+kind: MongoDBOpsManager
+metadata:
+  name: myopsmgr
+  namespace: mongodb
+spec:
+  replicas: 2
+  version: 8.0.13
+  adminCredentials: opsmgr-admin-secret
+  externalConnectivity:
+    type: LoadBalancer
+  security:
+    certsSecretPrefix: myopsmgr
+    tls:
+      ca: ca-issuer
+
+  configuration:
+    mms.ignoreInitialUiSetup: "true"
+    mms.fromEmailAddr: example@example.com
+    mms.replyToEmailAddr: example@example.com
+    mms.adminEmailAddr: example@example.com
+    mms.mail.transport: smtp
+    mms.mail.hostname: mail.example.com
+    mms.mail.port: "465"
+    mms.userSvcClass: UserSvcDb
+    mms.featureFlag.backup.wt.queryable: "disabled"
+    mms.featureFlag.backup.queryable: "disabled"
+
+  statefulSet:
+    spec:
+      volumeClaimTemplates:
+        - metadata:
+            name: mongodb-versions
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: "20Gi"
+      template:
+        spec:
+          containers:
+            - name: mongodb-ops-manager
+              volumeMounts:
+                - name: mongodb-versions
+                  mountPath: /mongodb-ops-manager/mongodb-releases
+
+  backup:
+    enabled: false
+
+  applicationDatabase:
+    topology: SingleCluster
+    members: 3
+    version: "8.0.0-ubi8"
+    security:
+      certsSecretPrefix: myopsmgr
+      tls:
+        ca: ca-issuer
