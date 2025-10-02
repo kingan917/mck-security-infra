@@ -1,0 +1,36 @@
+apiVersion: mongodb.com/v1
+kind: MongoDB
+metadata:
+  name: my-replica-set
+  namespace: mongodb
+  annotations:
+    mongodb.com/v1.architecture: "static"
+spec:
+  type: ReplicaSet
+  members: 3
+  version: "8.0.12-ent"
+  opsManager:
+    configMapRef:
+      name: my-project
+  credentials: organization-secret
+  security:
+    certsSecretPrefix: mdb
+    authentication:
+      enabled: true
+      modes: ["SCRAM", "X509", "OIDC"]
+      agents:
+        mode: "SCRAM"
+      oidcProviderConfigs:
+        - configurationName: "OIDC-IdP"
+          groupsClaim: "groups"
+          authorizationMethod: "WorkforceIdentityFederation"
+          authorizationType: "GroupMembership"
+    roles:
+      - role: "OIDC-IdP/5713c231-3675-46d8-b911-1832af3504c1"
+        db: "admin"
+        roles:
+          - role: "readWriteAnyDatabase"
+            db: "admin"
+    tls:
+      ca: ca-issuer
+      enabled: true
