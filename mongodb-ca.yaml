@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mongodb-ca
+  namespace: mongodb
+spec:
+  isCA: true
+  commonName: mongodb-ca
+  secretName: ca-key-pair
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  duration: 8760h # 1 year
+  issuerRef:
+    name: selfsigned-issuer
+  renewBefore: 360h

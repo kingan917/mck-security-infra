@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ops-manager-appdb-cert
+  namespace: mongodb
+spec:
+  secretName: myopsmgr-myopsmgr-db-cert
+  issuerRef:
+    name: ca-issuer
+  duration: 720h
+  renewBefore: 120h
+  dnsNames:
+    - myopsmgr-db-0.myopsmgr-db-svc.mongodb.svc.cluster.local
+    - myopsmgr-db-1.myopsmgr-db-svc.mongodb.svc.cluster.local
+    - myopsmgr-db-2.myopsmgr-db-svc.mongodb.svc.cluster.local
+  usages:
+    - server auth
+    - client auth

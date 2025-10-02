@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: my-replica-set-certificate
+  namespace: mongodb
+spec:
+  dnsNames:
+  - my-replica-set-0
+  - my-replica-set-0.my-replica-set-svc.mongodb.svc.cluster.local
+  - my-replica-set-1
+  - my-replica-set-1.my-replica-set-svc.mongodb.svc.cluster.local
+  - my-replica-set-2
+  - my-replica-set-2.my-replica-set-svc.mongodb.svc.cluster.local
+  duration: 240h
+  issuerRef:
+    name: ca-issuer
+  renewBefore: 120h
+  secretName: mdb-my-replica-set-cert
+  usages:
+  - server auth
+  - client auth
