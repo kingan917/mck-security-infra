@@ -1,0 +1,13 @@
+apiVersion: mongodb.com/v1
+kind: MongoDBUser
+metadata:
+  name: new-workload-user
+  namespace: mongodb
+spec:
+  username: "fddff735-e92b-4bd6-ac5e-cfafa5e943d5"
+  db: "$external"
+  mongodbResourceRef:
+    name: my-replica-set
+  roles:
+    - db: "admin"
+      name: "readWriteAnyDatabase"
